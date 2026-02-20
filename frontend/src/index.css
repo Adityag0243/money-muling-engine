@@ -1,0 +1,133 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+/* Replace the :root block in src/index.css with this: */
+:root {
+  /* Pure Black & Deep Cool Navy Base to match the screenshot */
+  --bg-base:        #000000; /* Pure black for the graph area */
+  --bg-panel:       #050608; /* Ultra-dark cool tone for header/sidebars */
+  --bg-card:        #0A0B10; /* Slightly raised for cards */
+  --bg-card-hover:  #11131A;
+  --bg-input:       #08090C;
+  
+  /* Precise, faint borders */
+  --border-base:    rgba(255, 255, 255, 0.06);
+  --border-accent:  rgba(0, 168, 107, 0.3);
+  --border-strong:  rgba(255, 255, 255, 0.15);
+  
+  /* Typography */
+  --text-primary:   #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-muted:     #4B5563;
+  --text-accent:    #00A86B; /* Changed from Cyan to Emerald Green */
+  
+  /* Threat Indicators */
+  --accent:         #00A86B; /* Changed from Cyan to Emerald Green */
+  --accent-dim:     rgba(0, 168, 107, 0.1);
+  --accent-glow:    rgba(0, 168, 107, 0.3);
+  
+  --warning:        #F59E0B; /* Amber - Suspicious */
+  --warning-dim:    rgba(245, 158, 11, 0.15);
+  
+  --danger:         #F43F5E; /* Brighter Rose/Red for Critical Threat */
+  --danger-dim:     rgba(244, 63, 94, 0.15);
+  --danger-glow:    rgba(244, 63, 94, 0.4);
+  
+  --success:        #10B981;
+  --success-dim:    rgba(16, 185, 129, 0.15);
+  
+  /* Depth & Elevation */
+  --shadow-card:    0 4px 20px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  --shadow-3d:      0px 0px 0px rgba(0,0,0,0);
+  
+  --noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: var(--noise);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.font-display { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+.font-mono    { font-family: 'JetBrains Mono', monospace; }
+.font-label   { font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+
+html { scroll-behavior: smooth; }
+
+.glass-panel {
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-base);
+}
+
+.glow-accent { text-shadow: 0 0 12px var(--accent-glow); }
+.glow-danger { text-shadow: 0 0 12px var(--danger-glow); }
+
+.risk-bar-track { background: var(--border-base); height: 4px; position: relative; overflow: visible; }
+.risk-bar-fill { height: 100%; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); position: relative; }
+.risk-bar-fill::after {
+  content: ''; position: absolute; right: -1px; top: -3px; width: 10px; height: 10px;
+  border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor;
+}
+
+.scroll::-webkit-scrollbar { width: 4px; }
+.scroll::-webkit-scrollbar-track { background: transparent; }
+.scroll::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 2px; }
+.scroll::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+.badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; padding: 2px 7px;
+  border: 1px solid currentColor; display: inline-flex; align-items: center; gap: 4px;
+}
+.badge-critical { color: var(--danger); background: var(--danger-dim); border-color: var(--danger); }
+.badge-high     { color: var(--warning); background: var(--warning-dim); border-color: var(--warning); }
+.badge-ok       { color: var(--accent); background: var(--accent-dim); border-color: var(--accent); }
+
+.input-field {
+  background: var(--bg-input); border: 1px solid var(--border-base); color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 8px 12px;
+  outline: none; transition: border-color 0.2s; width: 100%;
+}
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+.input-field::placeholder { color: var(--text-muted); }
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; box-shadow: 0 0 4px var(--accent); }
+  50%       { opacity: 1;   box-shadow: 0 0 16px var(--accent); }
+}
+.loading-dot { width: 6px; height: 6px; background: var(--accent); animation: pulse-glow 1.2s ease-in-out infinite; }
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes ring-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--danger-glow); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.alert-pulse { animation: ring-pulse 2s infinite; }
+
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.stagger > * { animation: fadeInUp 0.3s ease forwards; opacity: 0; }
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger > *:nth-child(5) { animation-delay: 0.25s; }
