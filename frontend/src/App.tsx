@@ -38,13 +38,36 @@ interface AnalysisResponse {
 
 type Stage = 'landing' | 'dashboard';
 
+function makeStrictExport(data: AnalysisResponse) {
+  return {
+    suspicious_accounts: (data.suspicious_accounts || []).map((a) => ({
+      account_id: a.account_id,
+      suspicion_score: a.suspicion_score,
+      detected_patterns: a.detected_patterns,
+      ring_id: a.ring_id,
+    })),
+    fraud_rings: (data.fraud_rings || []).map((r) => ({
+      ring_id: r.ring_id,
+      member_accounts: r.member_accounts,
+      pattern_type: r.pattern_type,
+      risk_score: r.risk_score,
+    })),
+    summary: {
+      total_accounts_analyzed: data.summary?.total_accounts_analyzed,
+      suspicious_accounts_flagged: data.summary?.suspicious_accounts_flagged,
+      fraud_rings_detected: data.summary?.fraud_rings_detected,
+      processing_time_seconds: data.summary?.processing_time_seconds,
+    },
+  };
+}
+
 function App() {
-  const [stage, setStage]               = useState<Stage>('landing');
-  const [data, setData]                 = useState<AnalysisResponse | null>(null);
+  const [stage, setStage] = useState<Stage>('landing');
+  const [data, setData] = useState<AnalysisResponse | null>(null);
   const { toast, showToast, hideToast } = useToast();
   const [selectedRingId, setSelectedRingId] = useState<string | null>(null);
-  const [selectedNode, setSelectedNode]     = useState<any | null>(null);
-  const [sarRing, setSarRing]               = useState<any | null>(null);
+  const [selectedNode, setSelectedNode] = useState<any | null>(null);
+  const [sarRing, setSarRing] = useState<any | null>(null);
 
   const handleAnalysisComplete = (result: AnalysisResponse) => {
     setData(result);
@@ -54,9 +77,9 @@ function App() {
 
   const downloadJson = () => {
     if (!data) return;
-    const { graph_data, ...r } = data;
+    const exportObj = makeStrictExport(data);          // strict subset only
     const a = document.createElement('a');
-    a.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(r, null, 2))}`;
+    a.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(exportObj, null, 2))}`;
     a.download = `fincen_extract_${Date.now()}.json`; a.click();
   };
 
@@ -69,37 +92,37 @@ function App() {
       <Header
         stats={{
           totalTransactions: data!.summary.total_accounts_analyzed,
-          processingTime:    data!.summary.processing_time_seconds,
-          fraudRings:        data!.summary.fraud_rings_detected,
-          illicitVolume:     0,
+          processingTime: data!.summary.processing_time_seconds,
+          fraudRings: data!.summary.fraud_rings_detected,
+          illicitVolume: 0,
         }}
         onExport={downloadJson}
         onBack={() => setStage('landing')}
       />
       <div className="flex flex-1 overflow-hidden relative">
-        <SidebarLeft 
-          rings={data!.fraud_rings} 
-          selectedRingId={selectedRingId} 
-          onSelectRing={setSelectedRingId} 
-          onGenerateSAR={setSarRing} 
+        <SidebarLeft
+          rings={data!.fraud_rings}
+          selectedRingId={selectedRingId}
+          onSelectRing={setSelectedRingId}
+          onGenerateSAR={setSarRing}
         />
         <main className="flex-1 relative bg-black">
-          <GraphVisualizer 
-            graphData={data!.graph_data} 
-            isolatedRingId={selectedRingId} 
-            onNodeClick={setSelectedNode} 
+          <GraphVisualizer
+            graphData={data!.graph_data}
+            isolatedRingId={selectedRingId}
+            onNodeClick={setSelectedNode}
           />
         </main>
-        <SidebarRight 
-          node={selectedNode} 
-          onClose={() => setSelectedNode(null)} 
-          showToast={showToast} 
+        <SidebarRight
+          node={selectedNode}
+          onClose={() => setSelectedNode(null)}
+          showToast={showToast}
         />
-        <SARPanel 
-          isOpen={!!sarRing} 
-          onClose={() => setSarRing(null)} 
-          ringData={sarRing} 
-          showToast={showToast} 
+        <SARPanel
+          isOpen={!!sarRing}
+          onClose={() => setSarRing(null)}
+          ringData={sarRing}
+          showToast={showToast}
         />
         <AnimatePresence>
           {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}

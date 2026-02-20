@@ -12,7 +12,7 @@ export function SidebarRight({ node, onClose, showToast }: SidebarRightProps) {
   const handleAction = async (action: 'false_positive' | 'escalated') => {
     if (!node) return;
     try {
-      const res = await fetch('http://localhost:8000/flag-account', {
+      const res = await fetch('https://money-mule-engine.onrender.com/flag-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

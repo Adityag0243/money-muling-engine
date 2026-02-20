@@ -28,7 +28,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
     camera.position.z = 120;
 
     // Inside LandingPage.tsx
-    
+
     // ... 
     const N = 300;
     const geometry = new THREE.BufferGeometry();
@@ -42,9 +42,9 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
 
       const rand = Math.random();
       // MADE THESE COLORS BRIGHTER (Values pushed up to 1.0)
-      if (rand > 0.95) { colors[i*3]=1.0; colors[i*3+1]=0.2; colors[i*3+2]=0.2; } // Bright Red
-      else if (rand > 0.8) { colors[i*3]=1.0; colors[i*3+1]=0.8; colors[i*3+2]=0.1; } // Bright Yellow/Amber
-      else { colors[i*3]=0.1; colors[i*3+1]=1.0; colors[i*3+2]=0.6; } // Bright Emerald
+      if (rand > 0.95) { colors[i * 3] = 1.0; colors[i * 3 + 1] = 0.2; colors[i * 3 + 2] = 0.2; } // Bright Red
+      else if (rand > 0.8) { colors[i * 3] = 1.0; colors[i * 3 + 1] = 0.8; colors[i * 3 + 2] = 0.1; } // Bright Yellow/Amber
+      else { colors[i * 3] = 0.1; colors[i * 3 + 1] = 1.0; colors[i * 3 + 2] = 0.6; } // Bright Emerald
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -60,10 +60,10 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
     const lineMat = new THREE.LineBasicMaterial({ color: 0x333333, transparent: true, opacity: 0.2 });
     const lineGeo = new THREE.BufferGeometry();
     const linePos = [];
-    for(let i=0; i<N; i++) {
-      for(let j=i+1; j<N; j++) {
-        const dist = Math.sqrt(Math.pow(positions[i*3]-positions[j*3], 2) + Math.pow(positions[i*3+1]-positions[j*3+1], 2) + Math.pow(positions[i*3+2]-positions[j*3+2], 2));
-        if(dist < 20) { linePos.push(positions[i*3], positions[i*3+1], positions[i*3+2]); linePos.push(positions[j*3], positions[j*3+1], positions[j*3+2]); }
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) {
+        const dist = Math.sqrt(Math.pow(positions[i * 3] - positions[j * 3], 2) + Math.pow(positions[i * 3 + 1] - positions[j * 3 + 1], 2) + Math.pow(positions[i * 3 + 2] - positions[j * 3 + 2], 2));
+        if (dist < 20) { linePos.push(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]); linePos.push(positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]); }
       }
     }
     lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
@@ -87,7 +87,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
     setLoading(true); setError(null);
     try {
       const fd = new FormData(); fd.append('file', file);
-      const res = await fetch('http://localhost:8000/analyze', { method: 'POST', body: fd });
+      const res = await fetch('https://money-mule-engine.onrender.com/analyze', { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Analysis failed');
       const result = await res.json();
       onAnalysisComplete(result);
@@ -116,7 +116,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
         <div className="min-h-[85vh] flex flex-col items-center justify-center text-center px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-white">
-              Financial Crime Detection <br/>
+              Financial Crime Detection <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00A86B] to-[#047857]">at Graph Scale</span>
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-10 leading-relaxed">
@@ -129,7 +129,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
 
           {/* Changed <100ms to <30 sec */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 1 }} className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 border-y border-white/5 py-8 w-full max-w-5xl bg-black/40 backdrop-blur-sm">
-            {[ { val: '<30 sec', label: 'Processing Latency' }, { val: '3-Tier', label: 'Risk Scoring' }, { val: 'Auto', label: 'SAR Generation' }, { val: 'O(V+E)', label: 'Graph Complexity' } ].map((s, i) => (
+            {[{ val: '<30 sec', label: 'Processing Latency' }, { val: '3-Tier', label: 'Risk Scoring' }, { val: 'Auto', label: 'SAR Generation' }, { val: 'O(V+E)', label: 'Graph Complexity' }].map((s, i) => (
               <div key={i} className="text-center border-r border-white/5 last:border-0">
                 <div className="text-2xl font-mono text-white mb-1">{s.val}</div>
                 <div className="text-xs text-gray-500 uppercase tracking-widest">{s.label}</div>
@@ -141,7 +141,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
         <div className="max-w-6xl mx-auto py-24 px-4">
           <h2 className="text-center text-2xl font-bold uppercase tracking-widest mb-16 text-gray-300">Intelligence Pipeline</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {[ { icon: <Database/>, title: 'Data Ingestion', desc: 'Securely parse high-volume transaction CSV logs.' }, { icon: <Activity/>, title: 'Heuristic Graphing', desc: 'Map hidden multi-hop relationships and layered fund flows.' }, { icon: <FileText/>, title: 'Automated SAR', desc: 'Compile evidence into FinCEN-ready Suspicious Activity Reports.' } ].map((step, i) => (
+            {[{ icon: <Database />, title: 'Data Ingestion', desc: 'Securely parse high-volume transaction CSV logs.' }, { icon: <Activity />, title: 'Heuristic Graphing', desc: 'Map hidden multi-hop relationships and layered fund flows.' }, { icon: <FileText />, title: 'Automated SAR', desc: 'Compile evidence into FinCEN-ready Suspicious Activity Reports.' }].map((step, i) => (
               <div key={i} className="glass-panel p-8 border border-white/10 hover:-translate-y-1 transition-transform">
                 <div className="w-12 h-12 rounded border border-[#00A86B]/30 bg-[#00A86B]/10 flex items-center justify-center text-[#00A86B] mb-6">{step.icon}</div>
                 <h3 className="text-lg font-bold mb-2">{step.title}</h3>
@@ -150,6 +150,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
             ))}
           </div>
         </div>
+
 
         <div ref={uploadRef} className="max-w-3xl mx-auto py-32 px-4">
           <div className="glass-panel p-10 relative overflow-hidden border border-white/10">
