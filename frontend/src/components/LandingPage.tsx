@@ -87,7 +87,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
     setLoading(true); setError(null);
     try {
       const fd = new FormData(); fd.append('file', file);
-      const res = await fetch('http://localhost:8000/analyze', { method: 'POST', body: fd });
+      const res = await fetch('https://money-mule-engine.onrender.com/analyze', { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Analysis failed');
       const result = await res.json();
       onAnalysisComplete(result);
