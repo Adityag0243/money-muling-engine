@@ -129,7 +129,7 @@ export function LandingPage({ onAnalysisComplete }: LandingPageProps) {
 
           {/* Changed <100ms to <30 sec */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 1 }} className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 border-y border-white/5 py-8 w-full max-w-5xl bg-black/40 backdrop-blur-sm">
-            {[{ val: '<30 sec', label: 'Processing Latency' }, { val: '3-Tier', label: 'Risk Scoring' }, { val: 'Auto', label: 'SAR Generation' }, { val: 'O(V+E)', label: 'Graph Complexity' }].map((s, i) => (
+            {[{ val: '<30 sec', label: 'Processing Latency' }, { val: '3-Tier', label: 'Risk Scoring' }, { val: 'Auto', label: 'SAR Generation' }, { val: 'O(n log n) n : no of edges', label: 'Graph Complexity' }].map((s, i) => (
               <div key={i} className="text-center border-r border-white/5 last:border-0">
                 <div className="text-2xl font-mono text-white mb-1">{s.val}</div>
                 <div className="text-xs text-gray-500 uppercase tracking-widest">{s.label}</div>
