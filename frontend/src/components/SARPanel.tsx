@@ -19,7 +19,7 @@ export function SARPanel({ isOpen, onClose, ringData, showToast }: SARPanelProps
   useEffect(() => {
     if (isOpen && ringData) {
       setLoading(true); setError(null); setReport(null);
-      fetch('http://localhost:8000/generate-sar', {
+      fetch('https://money-mule-engine.onrender.com/generate-sar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ringData),
       }).then(res => { if (!res.ok) throw new Error(); return res.json(); })
         .then(data => { setReport(data); setLoading(false); })
