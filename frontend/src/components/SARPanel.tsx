@@ -30,7 +30,7 @@ export function SARPanel({ isOpen, onClose, ringData, showToast }: SARPanelProps
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:8000/submit-sar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ring_id: ringData.ring_id, report_content: report }) });
+      const res = await fetch('https://money-mule-engine.onrender.com/submit-sar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ring_id: ringData.ring_id, report_content: report }) });
       if (res.ok) { showToast(`SAR for ${ringData.ring_id} submitted.`, 'success'); onClose(); } else throw new Error();
     } catch { showToast('Failed to submit SAR.', 'error'); setLoading(false); }
   };
