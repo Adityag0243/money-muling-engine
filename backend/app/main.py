@@ -25,6 +25,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://localhost:5173",
         "https://money-mule-engine.vercel.app",
+        "https://money-muling-system.vercel.app"
     ],
     allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=False,
